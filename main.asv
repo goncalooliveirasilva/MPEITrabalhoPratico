@@ -20,18 +20,19 @@ function [imageData, categories] = loadImageData(path)
             imdata = imread(filepath);
             imdata = imdata(:)';
             imageData(k + (i-1)*1500, :) = imdata;
-            categories(k) = cat_name;
+            categories(k + (i-1)*1500) = cat_name;
         end
     end
 end
 
-[imageData, categories] = loadImageData("dataset/train/");
-save("im")
-% imdata = imread("dataset/train/triangle/triangle-1_binarized.png");
-% imdata = imdata(:)';
 
-% binarizeImages("dataset_old/train/circle/", "dataset/train/circle/")
-% binarizeImages("dataset_old/train/triangle/", "dataset/train/triangle/")
-% binarizeImages("dataset_old/train/rectangle/", "dataset/train/rectangle/")
-% binarizeImages("dataset_old/train/square/", "dataset/train/square/")
-% binarizeImages("dataset_old/train/kite/", "dataset/train/kite/")
+% [imageData, categories] = loadImageData("dataset/test/");
+% save("imageTestData.mat", "imageData", "categories")
+load()
+
+
+% binarizeImages("dataset_old/test/circle/", "dataset/test/circle/")
+% binarizeImages("dataset_old/test/triangle/", "dataset/test/triangle/")
+% binarizeImages("dataset_old/test/rectangle/", "dataset/test/rectangle/")
+% binarizeImages("dataset_old/test/square/", "dataset/test/square/")
+% binarizeImages("dataset_old/test/kite/", "dataset/test/kite/")
