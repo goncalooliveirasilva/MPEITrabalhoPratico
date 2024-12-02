@@ -39,6 +39,9 @@ end
 % [imageData, categories] = loadImageData("dataset/test/");
 % save("imageTestData.mat", "imageData", "categories")
 
+% Retorna uma matrix das probabilidades de cada pixel para cada categoria,
+% um vetor com as probabilidades das e um vetor com as categorias(probs e
+% base_probs seguem a ordem desse vetor)
 function [categories_unique, base_probs, probs] = getProbabilities(imageData, categories)
     % Probabilidades de obter categoria X
     categories_unique = unique(categories);
@@ -49,9 +52,43 @@ function [categories_unique, base_probs, probs] = getProbabilities(imageData, ca
         base_probs(i) = sum(categories == categories_unique(i))/length(categories);
         
         data = sum(imageData(categories == categories_unique(i), :));
-        probs(i, :) = data / sum(data);
+        probs(i, :) = (data + 1) / sum(data + 1);
     end
 end
 
+% Retorna a categoria a que pertence img, com a sua probabilidade
+function [cat, prob]=testCategory(img, categories_unique, base_probs, probs)
+    prob = -inf;
+    cat = "NULL";
+    for i=1:length(categories_unique)
+        new_prob = sum(log(probs(i, img==1))) + log(base_probs(i));
+        % fprintf("Categoria a testar: %s (Probabilidade: %f)\n", categories_unique(i), new_prob)
+        if new_prob > prob
+            prob = new_prob;
+            cat = categories_unique(i);
+            % fprintf("Aceite!\n\n")
+        end
+    end
+end
 
+function show_image(img)
+    imshow(reshape(img, 100, 100))
+end
+
+load("imageTrainData.mat")
 [categories_unique, base_probs, probs] = getProbabilities(imageData, categories);
+
+% load("imageTestData.mat")
+
+num_errados = 0;
+for test_index=1:length(categories)
+    % fprintf("Categoria desejada: %s\n", categories(test_index));
+    % show_image(imageData(test_index, :))
+    [cat, prob]=testCategory(imageData(test_index, :), categories_unique, base_probs, probs);
+    % fprintf("Categoria obtida: %s\n", cat);
+    
+    if cat ~= categories(test_index)
+        num_errados = num_errados + 1;
+    end
+end
+fprintf("Numero de errados: %d\n", num_errados)
