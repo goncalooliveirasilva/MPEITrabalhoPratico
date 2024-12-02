@@ -1,4 +1,4 @@
-function binarizeImages(imageFolder, outputFolder)
+function binarizeImages(imageFolder, outputFolder, imsize)
     % Esta função converte as imagens png de um diretório, 
     % binariza-as e guarda-as num novo diretório
     % == Argumentos ==
@@ -6,7 +6,7 @@ function binarizeImages(imageFolder, outputFolder)
     % outputFolder: path para o diretório de destino
     imageFiles = dir(fullfile(imageFolder, '*.jpg'));
 
-    targetSize = [100 NaN];
+    targetSize = [imsize NaN];
     if isempty(imageFiles)
         error('No images found in the specified folder.');
     end

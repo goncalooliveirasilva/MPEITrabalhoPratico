@@ -1,45 +1,19 @@
 clc
 
-% binarizeImages("dataset_old/test/circle/", "dataset/test/circle/")
-% binarizeImages("dataset_old/test/triangle/", "dataset/test/triangle/")
-% binarizeImages("dataset_old/test/rectangle/", "dataset/test/rectangle/")
-% binarizeImages("dataset_old/test/square/", "dataset/test/square/")
-% binarizeImages("dataset_old/test/kite/", "dataset/test/kite/")
+imsize = 100;
 
-function [imageData, categories] = loadImageData(path)
-    dirs = dir(path);
-    dirflag = [dirs.isdir];
+% binarizeImages("dataset_old/test/circle/", "dataset_25/test/circle/", imsize)
+% binarizeImages("dataset_old/test/triangle/", "dataset_25/test/triangle/", imsize)
+% binarizeImages("dataset_old/test/rectangle/", "dataset_25/test/rectangle/", imsize)
+% binarizeImages("dataset_old/test/square/", "dataset_25/test/square/", imsize)
+% binarizeImages("dataset_old/test/kite/", "dataset_25/test/kite/", imsize)
 
-    categories_names = dirs(dirflag);
-    categories_names = {categories_names(3:end).name};
-    
-    imageData = zeros(1, 10000);
-    categories = categorical(1, 10000);
-
-    index = 0;
-    for i=1:length(categories_names)
-        cat_name = convertCharsToStrings(categories_names{i});
-        directory = join([path categories_names{i} "/"], "");
-        
-        imageFiles = dir(fullfile(directory, "*.png"));
-        
-        for k=1:length(imageFiles)
-            index = index + 1;
-
-            filepath = fullfile(directory, imageFiles(k).name);
-            imdata = imread(filepath);
-            imdata = imdata(:)';
-            imageData(index, :) = imdata;
-            categories(index) = cat_name;
-        end
-    end
-end
+% [imageData, categories] = loadImageData("dataset_25/test/", imsize);
+% save("imageTestData25px.mat", "imageData", "categories")
 
 
-% [imageData, categories] = loadImageData("dataset/test/");
-% save("imageTestData.mat", "imageData", "categories")
-
-% Retorna uma matrix das probabilidades de cada pixel para cada categoria,
+%%
+% Retorna uma matriz das probabilidades de cada pixel para cada categoria,
 % um vetor com as probabilidades das e um vetor com as categorias(probs e
 % base_probs seguem a ordem desse vetor)
 function [categories_unique, base_probs, probs] = getProbabilities(imageData, categories)
@@ -51,8 +25,11 @@ function [categories_unique, base_probs, probs] = getProbabilities(imageData, ca
     for i=1:length(categories_unique)
         base_probs(i) = sum(categories == categories_unique(i))/length(categories);
         
+        % Soma de todas as imagens da categoria
         data = sum(imageData(categories == categories_unique(i), :));
-        probs(i, :) = (data + 1) / sum(data + 1);
+
+        % Calcular probabilidades com Laplace smoothing
+        probs(i, :) = (data + 1) / (sum(data) + size(data, 2));
     end
 end
 
@@ -61,9 +38,13 @@ function [cat, prob]=testCategory(img, categories_unique, base_probs, probs)
     prob = -inf;
     cat = "NULL";
     for i=1:length(categories_unique)
+        % Calcular probabilidade para a imagem e categoria
         new_prob = sum(log(probs(i, img==1))) + log(base_probs(i));
+
         % fprintf("Categoria a testar: %s (Probabilidade: %f)\n", categories_unique(i), new_prob)
-        if new_prob > prob
+
+        % Nova probabilidade maxima
+        if new_prob >= prob
             prob = new_prob;
             cat = categories_unique(i);
             % fprintf("Aceite!\n\n")
@@ -71,21 +52,27 @@ function [cat, prob]=testCategory(img, categories_unique, base_probs, probs)
     end
 end
 
+% Mostra uma imagem
 function show_image(img)
     imshow(reshape(img, 100, 100))
 end
 
-load("imageTrainData.mat")
+load("imageTestData.mat")
 [categories_unique, base_probs, probs] = getProbabilities(imageData, categories);
+
+% load("imageTestData.mat")
+
+% test_index = 6;
+% fprintf("Categoria desejada: %s\n", categories(test_index));
+% show_image(imageData(test_index, :))
+% [cat, prob]=testCategory(imageData(test_index, :), categories_unique, base_probs, probs);
+% fprintf("Categoria obtida: %s\n", cat);
 
 % load("imageTestData.mat")
 
 num_errados = 0;
 for test_index=1:length(categories)
-    % fprintf("Categoria desejada: %s\n", categories(test_index));
-    % show_image(imageData(test_index, :))
     [cat, prob]=testCategory(imageData(test_index, :), categories_unique, base_probs, probs);
-    % fprintf("Categoria obtida: %s\n", cat);
     
     if cat ~= categories(test_index)
         num_errados = num_errados + 1;
