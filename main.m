@@ -62,3 +62,13 @@ for test_index=1:length(categories)
     end
 end
 fprintf("Numero de errados: %d\n", num_errados)
+
+%% BLOOM FILTER
+
+m = length(categories); % número receitas
+
+% determinar o n 
+% k_otimo = n*ln(2)/m
+% Pfp = (1-exp(-km/n))^k
+% Pfp = ????
+%
