@@ -1,3 +1,4 @@
+%% NAÏVE BAYES
 clear
 clc
 
