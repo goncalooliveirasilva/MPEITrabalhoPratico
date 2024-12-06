@@ -1,14 +1,15 @@
-% Calcula as distâncias de Jaccard de uma matriz de assinaturas.
+% Calcula as distâncias de Jaccard de uma matriz de assinaturas em relação a um documento.
 % Argumentos:
 %   - sigs: matriz de assinaturas
+%   - testDoc: vetor assinatura do documento de teste
 %   - k: número de funções de dispersão
-% Retorina:
+% Retorna:
 %    - J: matriz das distânicas
-function J = jaccardDistances(sigs, k)
-    J = zeros(N);
-    for n1=1:(N-1)
-        for n2=(n1+1):N
-            J(n1, n2) = sum(sigs(n1, :)~=sigs(n2, :))/k;
-        end
+function J = jaccardDistances(sigs, testDoc, k)
+    N = size(sigs, 1);
+
+    J = zeros(N, 1);
+    for n1=1:N
+        J(n1) = sum(sigs(n1, :)~=testDoc)/k;        
     end
 end
