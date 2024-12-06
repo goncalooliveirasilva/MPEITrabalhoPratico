@@ -18,7 +18,7 @@ function [sigs]=minhash(data, k, shingle_size)
             shingle = dado(i:(i+shingle_size-1));
             
             % Hashing e minhash
-            hash_vals = hash(shingle, k);
+            hash_vals = string2hash_2(shingle, k);
             sigs(n1, :) = min(sigs(n1, :), hash_vals);
         end
     end
