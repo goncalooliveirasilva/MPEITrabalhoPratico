@@ -92,6 +92,7 @@ J = jaccardDistances(sigs, sig_test, n_disp);
 % Pares similares
 pairs = simPairs(full_data, test_data, J, limiar);
 
+% Faz print de um elemento. Provavelmente vai sair daqui ou parar de existir no futuro
 function printElement(el, ending)
     if nargin < 2
         ending = "\n";
@@ -101,6 +102,7 @@ function printElement(el, ending)
     fprintf(ending);
 end
 
+% Print dos pares
 for pairIdx=1:size(pairs, 1)
     fprintf("Par nº %d:\n", pairIdx)
     if pairs{pairIdx, 1} == 0
