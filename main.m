@@ -35,6 +35,36 @@ num_recipes_for_category = numRecipesForCategory(categories);
 % Inserção das receitas no respetivo bloom filter
 BFs = addRecipesToBloomFilters(BFs, n, ks, data, categories, uniqueIngredients);
 
+
+%%
+% Teste para cada receita dos dados de treino (falsos negativos)
+falsos_negativos = 0;
+for i = 1:length(categories)
+    ingredients = uniqueIngredients(data(i, :) == 1);
+    [isMember, ~] = checkIfRecipeIsKnown(BFs, ingredients, ks, categories_unique);
+    if ~isMember
+        falsos_negativos = falsos_negativos + 1;
+    end
+end
+fprintf('FALSOS NEGATIVOS: %d\n', falsos_negativos);
+
+% Teste para strings aleatorias (falsos positivos)
+%falsos_positivos = 0;
+%stringsAleatorias = {"breadsalt", "cinammonoliveoil"};
+%for i = 1:length(stringsAleatorias)
+%    ingredients = stringsAleatorias{i};
+%    [isMember, ~] = checkIfRecipeIsKnown(BFs, ingredients, ks, categories_unique);
+%    if isMember
+%        falsos_positivos = falsos_positivos + 1;
+%    end
+%end
+%fprintf('FALSOS POSITIVOS: %d\n', falsos_positivos);
+
+
+
+
+
+
 %% MINHASH
 clear
 clc
