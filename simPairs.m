@@ -13,7 +13,7 @@ function pairs = simPairs(data, testData, J, threshold)
     n = 1;
     for n1= 1:N
         if J(n1) <= threshold
-            pairs(n, :) = {testData, data(n1, :), J(n1)};
+            pairs(n, :) = {0, n1, J(n1)};
             n = n+1;
         end
     end

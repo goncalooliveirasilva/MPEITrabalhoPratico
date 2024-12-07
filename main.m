@@ -91,3 +91,23 @@ J = jaccardDistances(sigs, sig_test, n_disp);
 
 % Pares similares
 pairs = simPairs(full_data, test_data, J, limiar);
+
+function printElement(el, ending)
+    if nargin < 2
+        ending = "\n";
+    end
+
+    fprintf('%s: {%s}%s', el{2}, join(string(el{1}), ', '));
+    fprintf(ending);
+end
+
+for pairIdx=1:size(pairs, 1)
+    fprintf("Par nº %d:\n", pairIdx)
+    if pairs{pairIdx, 1} == 0
+        printElement(test_data)
+    end
+
+    printElement(full_data(pairs{pairIdx, 2}, :))
+
+    fprintf("Distância: %f\n\n", pairs{pairIdx, 3})
+end
