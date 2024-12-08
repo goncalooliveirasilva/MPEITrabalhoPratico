@@ -37,16 +37,25 @@ BFs = addRecipesToBloomFilters(BFs, n, ks, data, categories, uniqueIngredients);
 
 
 %%
-% Teste para cada receita dos dados de treino (falsos negativos)
-falsos_negativos = 0;
+% Teste receitas (dados  treino) inconclusivas (estão em mais que um bloom filter)
+arr = zeros(length(categories), 1);
+ing = cell(length(categories), 1);
+num_receitas_inconclusivas = 0;
 for i = 1:length(categories)
     ingredients = uniqueIngredients(data(i, :) == 1);
+    ing{i} = ingredientsToStr(ingredients);
     [isMember, ~] = checkIfRecipeIsKnown(BFs, ingredients, ks, categories_unique);
+    arr(i) = isMember;
     if ~isMember
-        falsos_negativos = falsos_negativos + 1;
+        num_receitas_inconclusivas = num_receitas_inconclusivas + 1;
     end
 end
-fprintf('FALSOS NEGATIVOS: %d\n', falsos_negativos);
+fprintf('RECEITAS INCONCLUSIVAS: %d\n', num_receitas_inconclusivas);
+
+% Teste falsos negativos
+fn = getFalseNegatives(BFs, data, categories, uniqueIngredients, ks);
+fprintf('FALSOS NEGATIVOS\n');
+disp(fn); % tudo 0's como é suposto
 
 % Teste para strings aleatorias (falsos positivos)
 %falsos_positivos = 0;
