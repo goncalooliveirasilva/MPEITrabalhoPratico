@@ -22,7 +22,6 @@ fprintf("Numero de errados: %d\n", num_errors);
 % determinar n 
 % k_otimo = n*ln(2)/m
 % Pfp = (1-exp(-km/n))^k
-% n (fase inicial) -> 10 x m
 
 clc;
 %k_otimo = ceil(n*log(2)/m);
@@ -30,6 +29,7 @@ clc;
 % número de receitas de cada categoria
 num_recipes_for_category = numRecipesForCategory(categories);
 
+% criação dos bloom filters
 [BFs, ks, n] = createAllBloomFilters(num_recipes_for_category, 0.001);
 
 % Inserção das receitas no respetivo bloom filter
@@ -58,16 +58,16 @@ fprintf('FALSOS NEGATIVOS\n');
 disp(fn); % tudo 0's como é suposto
 
 % Teste para strings aleatorias (falsos positivos)
-%falsos_positivos = 0;
-%stringsAleatorias = {"breadsalt", "cinammonoliveoil"};
-%for i = 1:length(stringsAleatorias)
-%    ingredients = stringsAleatorias{i};
-%    [isMember, ~] = checkIfRecipeIsKnown(BFs, ingredients, ks, categories_unique);
-%    if isMember
-%        falsos_positivos = falsos_positivos + 1;
-%    end
-%end
-%fprintf('FALSOS POSITIVOS: %d\n', falsos_positivos);
+% falsos_positivos = 0;
+% stringsAleatorias = {"breadsalt", "cinammonoliveoil"};
+% for i = 1:length(stringsAleatorias)
+%     ingredients = stringsAleatorias{i};
+%     [isMember, ~] = checkIfRecipeIsKnown(BFs, ingredients, ks, categories_unique);
+%     if isMember
+%         falsos_positivos = falsos_positivos + 1;
+%     end
+% end
+% fprintf('FALSOS POSITIVOS: %d\n', falsos_positivos);
 
 
 

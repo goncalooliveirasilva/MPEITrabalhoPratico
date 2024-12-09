@@ -1,9 +1,10 @@
 function [BFs, ks, n] = createAllBloomFilters(num_recipes_for_category, Pfp)
     % Esta função cria um cell array que contém um bloom filter para
-    % cada categoria.
-    % num_recipes_for_category: numero de receitas em cada categoria
-    % Pfp: objetivo de percentagem de falsos positivos
-    % Assume que é adotado o k ótimo na inserção dos elementos
+    % cada categoria. Assume que é adotado o k ótimo na inserção dos
+    % elementos.
+    % Argumentos:
+    %   - num_recipes_for_category: numero de receitas em cada categoria
+    %   - Pfp: objetivo de percentagem de falsos positivos
     % Devolve:
     %   BFs: cell array com um bloom filter em cada coluna
     %   ks: array com os valores ótimos de k para cada bloom filter
