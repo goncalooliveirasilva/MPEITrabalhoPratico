@@ -43,7 +43,7 @@ clc;
 num_recipes_for_category = numRecipesForCategory(train_categories);
 
 % criação dos bloom filters
-[BFs, ks, n] = createAllBloomFilters(num_recipes_for_category, 0.001, 1000000);
+[BFs, ks, n] = createAllBloomFilters(num_recipes_for_category, 0.001);
 
 % Inserção das receitas no respetivo bloom filter
 BFs = addRecipesToBloomFilters(BFs, n, ks, train_data, categories, uniqueIngredients);
@@ -85,7 +85,7 @@ disp(fn); % tudo 0's como é suposto
 num_recipes_for_category = numRecipesForCategory(train_categories);
 
 % criação dos bloom filters
-[BFs, ks, n] = createAllBloomFilters(num_recipes_for_category, 0.001, 1000000);
+[BFs, ks, n] = createAllBloomFilters(num_recipes_for_category, 0.001);
 
 %$ adicionar receitas aos filtros não correspondentes
 

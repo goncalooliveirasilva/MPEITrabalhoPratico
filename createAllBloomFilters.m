@@ -16,12 +16,12 @@ function [BFs, ks, n] = createAllBloomFilters(num_recipes_for_category, Pfp, n_v
     m = num_recipes_for_category(:, 2)';
 
     % determinar os valores de n para cada filtro
-    n = ones(1, cat_unique)*n_value;
-    if nargin < 3
-        n = zeros(1, cat_unique);
-        for i = 1:cat_unique
-            n(i) = ceil(log(Pfp) / (log(((1-exp(-log(2)))^(log(2)/m{i})))));
-        end
+    n = zeros(1, cat_unique);
+    if nargin == 3
+        n = ones(1, cat_unique)*n_value;
+    end
+    for i = 1:cat_unique
+        n(i) = ceil(log(Pfp) / (log(((1-exp(-log(2)))^(log(2)/m{i})))));
     end
     % determinar os valores ótimos de k
     ks = ceil((n*log(2))./cell2mat(m));
