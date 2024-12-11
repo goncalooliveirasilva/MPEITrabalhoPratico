@@ -1,4 +1,4 @@
-function [str] = ingredientsToStr(ingredients)
+function str = ingredientsToStr(ingredients)
     % Esta função junta os ingredientes de uma receita por ordem alfabetica
     % num array de caracteres
     % Argumentos:

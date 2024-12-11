@@ -1,4 +1,4 @@
-function [randomStrings] = generateRandomStrings(N, minLen, maxLen, chars)
+function randomStrings = generateRandomStrings(N, minLen, maxLen, chars)
     % Gera um cell array de strings com tamanhos aleatórios
     % Argumentos:
     %   - N: numero de strings a gerar

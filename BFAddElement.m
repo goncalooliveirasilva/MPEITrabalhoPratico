@@ -1,4 +1,4 @@
-function [BF] = BFAddElement(BF, n, element, k)
+function BF = BFAddElement(BF, n, element, k)
     % Esta função adiciona um elemento ao bloom filter BF
     % Argumentos:
     %   - n: tamanho do bloom filter

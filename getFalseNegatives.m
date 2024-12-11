@@ -1,4 +1,4 @@
-function [fn] = getFalseNegatives(BFs, data, categories, uniqueIngredients, ks)
+function fn = getFalseNegatives(BFs, data, categories, uniqueIngredients, ks)
     % Esta função calcula o número de falsos negativos de cada bloom filter
     % Argumentos:
     %   - Bfs: cell array com os bloom filters

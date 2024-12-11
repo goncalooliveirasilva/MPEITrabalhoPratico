@@ -1,4 +1,4 @@
-function [BF] = BFinitialize(n)
+function BF = BFinitialize(n)
     % Esta função inicializa um bloom filter de tamanho n
     % Argumentos:
     %   - n: dimensão do bloom filter

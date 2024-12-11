@@ -1,4 +1,4 @@
-function hash2=string2hash_2(str,k)
+function hash2 = string2hash_2(str,k)
     hash2 = zeros(1, k);
     str=double(str);
     hash = 5381*ones(size(str,1),1); 

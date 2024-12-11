@@ -1,4 +1,4 @@
-function [num_recipes] = numRecipesForCategory(categories)
+function num_recipes = numRecipesForCategory(categories)
     % Esta função devolve cell array com número de receitas de cada categoria
     % coluna 1 -> categoria
     % coluna 2 -> numero receitas

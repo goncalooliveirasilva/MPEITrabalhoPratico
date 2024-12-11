@@ -1,4 +1,4 @@
-function [BFs] = addRecipesToBloomFilters(BFs, n, ks, data, categories, uniqueIngredients)
+function BFs = addRecipesToBloomFilters(BFs, n, ks, data, categories, uniqueIngredients)
     % Esta função adiciona as receitas ao respetivo bloom filter
     % Argumentos:
     %   - BFs: cell array com os bloom filters (output da função createAllBloomFilters)

@@ -1,4 +1,4 @@
-function [result] = BFIsMember(BF, element, k)
+function result = BFIsMember(BF, element, k)
     % Esta função verifica se um elemento faz parte ou não
     % do bloom filter BF
     % Argumentos:
