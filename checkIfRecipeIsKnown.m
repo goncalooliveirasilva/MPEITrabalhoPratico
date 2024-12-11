@@ -1,4 +1,4 @@
-function [isMember, category] = checkIfRecipeIsKnown(BFs, ingredients, ks, categories_unique)
+function [isMember, category] = checkIfRecipeIsKnown(BFs, ingredients, ks, categories_unique, ver)
     % Esta função verifica se uma receita já é conhecida (é membro de algum bloom filter)
     % Argumentos:
     %   - BFs: cell array com os filtros de bloom
@@ -23,8 +23,16 @@ function [isMember, category] = checkIfRecipeIsKnown(BFs, ingredients, ks, categ
     end 
     %disp(results);
     % verificar se pertence apenas a 1 bloom filter
-    if sum(results) == 1
+    if ver == 1
+        if sum(results) == 1
+            isMember = true;
+            category = categories_unique(results == 1);
+        end
+        return
+    end
+    
+    if sum(results) == 5
         isMember = true;
-        category = categories_unique(results == 1);
+        category = categories_unique(results == 0);
     end
 end

@@ -12,7 +12,7 @@ wanted_cuisines = {
     'indian'
     'brazilian'
 };
-max_ingredients = 1500;
+max_ingredients = 3000;
 
 % Initialize containers
 cuisines = {};
@@ -30,7 +30,7 @@ for i = 1:length(data)
         for ing=1:length(data(i).ingredients)
             ingr = data(i).ingredients(ing);
             ingr = [ingr{:}];
-            if numel(strsplit(ingr)) > 2
+            if numel(strsplit(ingr)) > 4
                 add = 0;
                 break
             end
