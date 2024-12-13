@@ -6,13 +6,14 @@ rng("shuffle")
 load("dataToNaiveBayes.mat")
 data_split = 0.8; % Percentagem dos dados que são para treino
 
-perm = randperm(length(categories), length(categories));
 
-% Dados de treino (90% dos dados totais)
+perm = randperm(length(categories));
+
+% Dados de treino
 train_data = data(perm(1:ceil(length(categories)*data_split)), :);
 train_categories = categories(perm(1:ceil(length(categories)*data_split)));
 
-% Dados de teste (10% dos dados totais)
+% Dados de teste
 test_data = data(perm((ceil(length(categories)*data_split) + 1): length(categories)), :);
 test_categories = categories(perm((ceil(length(categories)*data_split) + 1): length(categories)));
 
@@ -139,28 +140,47 @@ disp(fn); % tudo 0's como é suposto
 %% MINHASH
 clear
 clc
+rng("shuffle")
 
 load("dataset.mat")
 
+data_split = 0.8; % Percentagem dos dados que são para treino
+
+n_recipes = size(full_data, 1);
+perm = randperm(n_recipes);
+
+% Dados de treino
+%train_data = full_data(perm(1 : ceil(n_recipes*data_split)), :);
+train_data = full_data((1 : ceil(n_recipes*data_split)), :);
+
+% Dados de teste
+%test_data = full_data(perm((ceil(n_recipes*data_split) + 1) : n_recipes), :);
+test_data = full_data((ceil(n_recipes*data_split) + 1) : n_recipes, :);
+        
+        
 % Valor aleatório para testar
 % test_index = randi(length(uniqueIngredients));
 % test_category = full_data{test_index, 2};
 % test_ingredients = full_data{test_index, 1};
 % test_data = full_data(test_index, :);
+%%
+clc
 
 n_disp = 100;
 shingle_size = 3;
 limiar = 0.4;
 
 % Assinaturas
-sigs = minhash(full_data, n_disp, shingle_size);
-sig_test = minhash(test_data, n_disp, shingle_size);
+sigs = minhash(train_data, n_disp, shingle_size);
+sigs_test = minhash(test_data, n_disp, shingle_size);
+%sigs = minhashWords(train_data, n_disp);
+%sigs_test = minhashWords(test_data, n_disp);
 
 % Distâncias de Jaccaard
-J = jaccardDistances(sigs, sig_test, n_disp);
+J = jaccardDistances(sigs, sigs_test, n_disp);
 
 % Pares similares
-pairs = simPairs(full_data, test_data, J, limiar);
+pairs = simPairs(train_data, test_data, J, limiar);
 
 % Faz print de um elemento. Provavelmente vai sair daqui ou parar de existir no futuro
 function printElement(el, ending)
@@ -175,11 +195,12 @@ end
 % Print dos pares
 for pairIdx=1:size(pairs, 1)
     fprintf("Par nº %d:\n", pairIdx)
-    if pairs{pairIdx, 1} == 0
-        printElement(test_data)
-    end
+    %if pairs{pairIdx, 1} == 0
+    %    printElement(test_data)
+    %end
 
-    printElement(full_data(pairs{pairIdx, 2}, :))
+    printElement(train_data(pairs{pairIdx, 1}, :))
+    printElement(test_data(pairs{pairIdx, 2}, :))
 
     fprintf("Distância: %f\n\n", pairs{pairIdx, 3})
 end

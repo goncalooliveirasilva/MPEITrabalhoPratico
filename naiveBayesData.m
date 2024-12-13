@@ -1,3 +1,5 @@
+% Converte o dataset numa array lógica para usar no Naïve Bayes e no Bloom Filter
+
 clear
 clc
 
