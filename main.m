@@ -187,9 +187,9 @@ fprintf('\n');
 fprintf('Generic Threshold: %d\n', generic_threshold);
 fprintf('Threshold: %f\n', threshold);
 fprintf('Nº receitas de teste: %d\n', num_test_recipes);
-fprintf('Nº receitas classificadas corretamente (BF v3-m2): %d\n', receitas_acertadas);
+fprintf('Nº receitas classificadas corretamente (BF v3-m1): %d\n', receitas_acertadas);
 fprintf('Nº receitas inconclusivas (BF v3-m2): %d\n', receitas_inconclusivas);
-fprintf('Nº receitas classificadas incorretamente (BF v3-m2): %d\n', receitas_classificadas_incorretas);
+fprintf('Nº receitas classificadas incorretamente (BF v3-m1): %d\n', receitas_classificadas_incorretas);
 
 
 
