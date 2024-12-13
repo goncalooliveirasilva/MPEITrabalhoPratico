@@ -135,7 +135,7 @@ fprintf('Nº receitas classificadas incorretamente (BF v2): %d\n', receitas_clas
 % que aparecem em todas os várias categorias
 
 % são considerados ingredientes genéricos ingredientes que aparecem
-% em 3 ou mais categorias
+% em generic_threshold ou mais categorias
 generic_threshold = 4;
 [specificIng, genericIng, ingOccurrences] = prepareDataForBFs_v3(train_data, train_categories, generic_threshold);
 
