@@ -150,21 +150,11 @@ n_recipes = size(full_data, 1);
 perm = randperm(n_recipes);
 
 % Dados de treino
-%train_data = full_data(perm(1 : ceil(n_recipes*data_split)), :);
-train_data = full_data((1 : ceil(n_recipes*data_split)), :);
+train_data = full_data(perm(1 : ceil(n_recipes*data_split)), :);
 
 % Dados de teste
-%test_data = full_data(perm((ceil(n_recipes*data_split) + 1) : n_recipes), :);
-test_data = full_data((ceil(n_recipes*data_split) + 1) : n_recipes, :);
-        
-        
-% Valor aleatório para testar
-% test_index = randi(length(uniqueIngredients));
-% test_category = full_data{test_index, 2};
-% test_ingredients = full_data{test_index, 1};
-% test_data = full_data(test_index, :);
-%%
-clc
+test_data = full_data(perm((ceil(n_recipes*data_split) + 1) : n_recipes), :);
+
 
 n_disp = 100;
 shingle_size = 3;
@@ -195,9 +185,6 @@ end
 % Print dos pares
 for pairIdx=1:size(pairs, 1)
     fprintf("Par nº %d:\n", pairIdx)
-    %if pairs{pairIdx, 1} == 0
-    %    printElement(test_data)
-    %end
 
     printElement(train_data(pairs{pairIdx, 1}, :))
     printElement(test_data(pairs{pairIdx, 2}, :))
