@@ -1,16 +1,27 @@
+% Calcula as componentes da matriz de confusão do Naïve Bayes.
+% Argumentos:
+%   - data: matriz de dados
+%   - categories: matriz das categorias para cada dado
+%   - categories_unique: vetor com as categorias únicas (probs e base_probs seguem a ordem de categorias deste vetor)
+%   - base_probs: vetor de probabilidades de cada categoria
+%   - probs: vetor de probabilidades de cada ingrediente para cada categoria
+% Retorna:
+%   - confElements: cell array com uma matriz para cada categoria da forma:
+%       [TP TN FP FN]
 function confElements = NaiveBayesConfElements(data, categories, categories_unique, base_probs, probs)
-    % Esta função devolve as componentes da matriz de confusão do Naïve Bayes.
+    % Inicializar
     confElements = cell(1, length(categories_unique));
     conf_matrix = zeros(length(categories_unique));
 
-
-    % Popular a matriz de confusão
+    % Popular a matriz de confusão multiclass
     for test_index=1:length(categories)
         [cat, ~] = testCategory(data(test_index, :), categories_unique, base_probs, probs);
-
+        
+        % Adicionar 1 aos valores relativos à categoria calculada e à dada
         conf_matrix(categories_unique == cat, categories_unique == categories(test_index)) = conf_matrix(categories_unique == cat, categories_unique == categories(test_index)) + 1;
     end
 
+    % Calcular os componentes para cada categoria
     for i=1:length(confElements)
         elements = zeros(1, 4);
         % 1 -> TP

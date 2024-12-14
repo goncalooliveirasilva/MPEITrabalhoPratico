@@ -18,7 +18,7 @@ test_data = data(perm((ceil(length(categories)*data_split) + 1): length(categori
 test_categories = categories(perm((ceil(length(categories)*data_split) + 1): length(categories)));
 
 % Obter matriz de probabilidades
-[categories_unique, base_probs, probs] = getProbabilities(data, categories);
+[categories_unique, base_probs, probs] = getProbabilities(train_data, train_categories);
 
 % Obter TP, TN, FP e FN
 confElements = NaiveBayesConfElements(test_data, test_categories, categories_unique, base_probs, probs);
