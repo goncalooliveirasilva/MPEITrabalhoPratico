@@ -9,7 +9,7 @@ data_split = 0.8; % Percentagem dos dados que são para treino
 [train_data, train_categories, test_data, test_categories] = getTrainAndTestData(data_split, data, categories);
 
 % Obter matriz de probabilidades
-[categories_unique, base_probs, probs] = getProbabilities(data, categories);
+[categories_unique, base_probs, probs] = getProbabilities(train_data, train_categories);
 
 % Obter TP, TN, FP e FN
 confElements = NaiveBayesConfElements(test_data, test_categories, categories_unique, base_probs, probs);
