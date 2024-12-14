@@ -13,15 +13,28 @@ function [BFs, ks, n] = createAllBloomFilters_v3(m_BFs, Pfp, n_value)
     cat_unique = length(m_BFs);
     BFs = cell(1, cat_unique);
     % determinar os valores de n para cada filtro
-    n = zeros(1, cat_unique);
     if nargin == 3
         n = ones(1, cat_unique)*n_value;
-    end
-    for i = 1:cat_unique
-        n(i) = ceil(log(Pfp) / (log(((1-exp(-log(2)))^(log(2)/m_BFs(i))))));
+    else
+        n = zeros(1, cat_unique);
+        for i = 1:cat_unique
+            if m_BFs(i) > 0
+                %n(i) = ceil(log(Pfp) / (log(((1-exp(-log(2)))^(log(2)/m_BFs(i))))));
+                n(i) = ceil((-m_BFs(i) * log(Pfp)) / (log(2)^2));
+            else
+                n(i) = 0;
+            end
+        end
     end
     % determinar os valores ótimos de k
-    ks = ceil((n*log(2))./m_BFs);
+    ks = zeros(1, cat_unique);
+    for i = 1:cat_unique
+        if m_BFs(i) > 0
+            ks(i) = ceil((n(i) * log(2)) / m_BFs(i));
+        else
+            ks(i) = 0;
+        end
+    end
 
     % inicialização dos filtros
     for i = 1:cat_unique
