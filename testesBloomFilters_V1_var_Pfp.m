@@ -8,7 +8,9 @@ clear; clc;
 % uma dimensão (n) e um número de hashfunctions (k) ajustado.
 % Vão sendo impressos na consola os parâmetros de cada iteração mais detalhadamente. 
 % No final são criados alguns gráficos para se perceber mais fácilmente o
-% comportamento dos parâmetros avaliados.
+% comportamento dos parâmetros avaliados. Aparecem ainda alguns valores
+% médios com o objetivo de se perceber de um modo geral a resposta da
+% abordagem à variação dos parâmetros.
 
 % Parâmetros a variar:
 % Pfp_s: probabilidade de falsos positivos
@@ -110,11 +112,15 @@ end
 
 fprintf('\n');
 fprintf('==== RESULTADOS MÉDIOS ====\n');
-fprintf('> Média falsos positivos: %f\n', mean(falsos_positivos));
+m_receitas_corretas = mean(receitas_corretas);
+m_receitas_incorretas = mean(receitas_incorretas);
+m_falsos_positivos = mean(falsos_positivos);
+fprintf('> Média falsos positivos: %f\n', m_falsos_positivos);
 fprintf('> Média colisões: %f\n', mean(sum_colisoes));
-fprintf('> Média receitas corretas: %f\n', mean(receitas_corretas));
-fprintf('> Média receitas incorretas: %f\n', mean(receitas_incorretas));
+fprintf('> Média receitas corretas: %f\n', m_receitas_corretas);
+fprintf('> Média receitas incorretas: %f\n', m_receitas_incorretas);
 fprintf('> Média tempo verificação receitas: %f\n', mean(tempos_verificacao));
+fprintf('> RELAÇÃO ENTRE RECEITAS CORRETAS E INCORRETAS: %.3f\n', m_receitas_corretas/m_receitas_incorretas);
 
 % gráfico falsos positivos
 figure;
