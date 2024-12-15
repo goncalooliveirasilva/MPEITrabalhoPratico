@@ -205,14 +205,14 @@ J = jaccardDistances(sigs, sigs_test, n_disp);
 pairs = simPairs(train_data, test_data, J, limiar);
 
 % Faz print de um elemento. Provavelmente vai sair daqui ou parar de existir no futuro
-function printElement(el, ending)
-    if nargin < 2
-        ending = "\n";
-    end
-
-    fprintf('%s: {%s}%s', el{2}, join(string(el{1}), ', '));
-    fprintf(ending);
-end
+%function printElement(el, ending)
+%    if nargin < 2
+%        ending = "\n";
+%    end
+%
+%    fprintf('%s: {%s}%s', el{2}, join(string(el{1}), ', '));
+%    fprintf(ending);
+%end
 
 % Print dos pares
 for pairIdx=1:size(pairs, 1)
@@ -222,4 +222,84 @@ for pairIdx=1:size(pairs, 1)
     printElement(test_data(pairs{pairIdx, 2}, :))
 
     fprintf("Distância: %f\n\n", pairs{pairIdx, 3})
+end
+
+
+%% DEMONSTRAÇÃO CONJUNTA
+clear
+clc
+rng("shuffle")
+
+n_test_elements = 5;
+
+% NAÏVE BAYES E BLOOM FILTERS
+load("dataToNaiveBayes.mat")
+
+perm = randperm(length(categories));
+
+% Dados de treino
+train_data = data(perm(1:(end-n_test_elements)), :);
+train_categories = categories(perm(1:(end-n_test_elements)));
+
+% Dados de teste
+test_data = data(perm((end-n_test_elements + 1): end), :);
+test_categories = categories(perm((end-n_test_elements + 1): end));
+
+% Obter matriz de probabilidades (naïve bayes)
+[categories_unique, base_probs, probs] = getProbabilities(train_data, train_categories);
+
+%%%%%%%---------------------------------------------------------
+%%%%%%% Código para criar os filtros meter os dados de treino lá
+
+
+%%%%%%%---------------------------------------------------------
+
+% MINHASH
+load("dataset.mat")
+
+n_disp = 100;
+shingle_size = 3;
+limiar = 0.2;
+
+% Dados de treino
+train_data_minhash = full_data(perm(1:(end-n_test_elements)), :);
+train_categories_minhash = categories(perm(1:(end-n_test_elements)));
+
+% Dados de teste
+test_data_minhash = full_data(perm((end-n_test_elements + 1): end), :);
+test_categories_minhash = categories(perm((end-n_test_elements + 1): end));
+
+% Assinaturas
+sigs_train = minhashBoth(train_data_minhash, n_disp, shingle_size);
+
+% Função anónima para fazer print de um elemento.
+printElement = @(el) fprintf('%s: {%s}\n', el{2}, join(string(el{1}), ', '));
+
+for test_data_idx = 1:size(test_data, 1)
+    recipe_data = test_data(test_data_idx, :);
+    recipe_data_minhash = test_data_minhash(test_data_idx, :);
+
+    fprintf("Receita a testar:\n")
+    printElement(recipe_data_minhash)
+
+    %%%%%%%-----------------------------------------------------
+    %%%%%%% Código para testar o elemento com o bloom filter
+
+    %%% Se não houver problemas, dar a resposta.
+    %%% Se houver, continuar.
+    %%% Meter uns prints a falar do resultado (se é inconclusivo, etc)
+    %%%%%%%-----------------------------------------------------
+
+    % NAÏVE BAYES
+    [cat, prob] = testCategory(recipe_data, categories_unique, base_probs, probs);
+    fprintf("Naïve Bayes: origem calculada: %s\n", cat)
+
+    % MINHASH
+    sig_test = minhashBoth(recipe_data_minhash, n_disp, shingle_size);
+
+    % Distâncias de Jaccaard
+    J = jaccardDistances(sigs_train, sig_test, n_disp);
+
+    % Pares similares
+    pairs = simPairs(train_data_minhash, test_data_minhash, J, limiar);
 end
