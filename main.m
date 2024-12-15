@@ -259,7 +259,14 @@ load("dataset.mat")
 
 n_disp = 100;
 shingle_size = 3;
-limiar = 0.2;
+limiar = 0.8;
+limiar_resultado = 0.5; 
+
+% Função anónima para fazer print de um elemento.
+printElement = @(el) fprintf('%s: {%s}\n', el{2}, join(string(el{1}), ', '));
+
+% Número de receitas acertadas corretamente
+n_certos = 0;
 
 % Dados de treino
 train_data_minhash = full_data(perm(1:(end-n_test_elements)), :);
@@ -271,9 +278,6 @@ test_categories_minhash = categories(perm((end-n_test_elements + 1): end));
 
 % Assinaturas
 sigs_train = minhashBoth(train_data_minhash, n_disp, shingle_size);
-
-% Função anónima para fazer print de um elemento.
-printElement = @(el) fprintf('%s: {%s}\n', el{2}, join(string(el{1}), ', '));
 
 for test_data_idx = 1:size(test_data, 1)
     recipe_data = test_data(test_data_idx, :);
@@ -292,7 +296,10 @@ for test_data_idx = 1:size(test_data, 1)
 
     % NAÏVE BAYES
     [cat, prob] = testCategory(recipe_data, categories_unique, base_probs, probs);
-    fprintf("Naïve Bayes: origem calculada: %s\n", cat)
+    fprintf("Naïve Bayes: origem calculada: %s\n\n", cat)
+    
+    % recipe_data = test_data;
+    % recipe_data_minhash = test_data_minhash;
 
     % MINHASH
     sig_test = minhashBoth(recipe_data_minhash, n_disp, shingle_size);
@@ -301,5 +308,26 @@ for test_data_idx = 1:size(test_data, 1)
     J = jaccardDistances(sigs_train, sig_test, n_disp);
 
     % Pares similares
-    pairs = simPairs(train_data_minhash, test_data_minhash, J, limiar);
+    pairs = simPairs(train_data_minhash, recipe_data_minhash, J, limiar);
+    fprintf("Pares similares: A receita mais similar tem distância %f:\n", pairs{1, 3})
+    printElement(train_data_minhash(pairs{1, 1}, :))
+
+
+    % Resultado
+    fprintf("\nRESULTADO:\n")
+    if pairs{1, 3} <= limiar_resultado
+        cat_resultado = train_data_minhash{pairs{1, 1}, 2};
+    else
+        cat_resultado = cat;
+    end
+    fprintf("A receita classifica-se como %s\n", cat_resultado)
+
+    if strcmp(string(cat_resultado), recipe_data_minhash{1, 2})
+        n_certos = n_certos + 1;
+        fprintf("Acertou!\n\n")
+    else
+        fprintf("Falhou...\n\n")
+    end
 end
+
+fprintf("%d das %d receitas foram classificadas corretamente.", n_certos, n_test_elements)
