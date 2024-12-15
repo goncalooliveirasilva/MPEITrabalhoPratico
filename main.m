@@ -318,9 +318,11 @@ test_categories = categories(perm((end-n_test_elements + 1): end));
 
 % ingredientes que aparecem em 3 ou mais categorias são excluídos
 generic_threshold = 3;
+
 threshold = 0.3;
 prob_falsos_positivos = 0.001;
 acertos_bloom_filter = 0;
+avaliacoes_bloom_filter = 0;
 
 % divisão dos ingredientes
 [specificIng, genericIng, ingOccurrences] = prepareDataForBFs_v3(train_data, train_categories, generic_threshold);
@@ -394,6 +396,7 @@ for test_data_idx = 1:size(test_data, 1)
         else
             fprintf("Falhou...\n\n");
         end
+        avaliacoes_bloom_filter = avaliacoes_bloom_filter + 1;
         continue;
     end
 
@@ -442,4 +445,4 @@ for test_data_idx = 1:size(test_data, 1)
 end
 
 fprintf("%d das %d receitas foram classificadas corretamente.\n", n_acertos, n_test_elements)
-fprintf("Bloom Filter acertou %d receitas\n", acertos_bloom_filter)
+fprintf("Bloom Filter acertou %d receitas de %d avaliadas.\n", acertos_bloom_filter, avaliacoes_bloom_filter)
