@@ -121,14 +121,14 @@ bar(a_values, [media_rc_a, media_ri_a], 'grouped');
 xlabel('a');
 ylabel('média de Receitas');
 legend('corretas', 'incorretas');
-title('Médias de Receitas para Valores de a (n = a * m)');
+title('Médias de Receitas para Valores de a (n = a * m) (BF-V1)');
 grid on;
 figure;
 bar(k_values, [media_rc_k', media_ri_k'], 'grouped');
 xlabel('k');
 ylabel('média de Receitas');
 legend('corretas', 'incorretas');
-title('Médias de Receitas Para Valores de k (nº hashfunctions)');
+title('Médias de Receitas Para Valores de k (nº hashfunctions) (BF-V1)');
 grid on;
 
 sum_colisoes = zeros(length(a_values), length(k_values));

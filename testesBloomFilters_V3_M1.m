@@ -142,14 +142,14 @@ bar(thresholds, [media_rc_thres, media_ri_thres], 'grouped');
 xlabel('threshold');
 ylabel('média de Receitas');
 legend('corretas', 'incorretas');
-title('Médias de Receitas para Valores de threshold');
+title('Médias de Receitas para Valores de threshold (BF-V3-M1)');
 grid on;
 figure;
 bar(Pfp_s, [media_rc_Pfp', media_ri_Pfp'], 'grouped');
 xlabel('probabilidade falsos positivos');
 ylabel('média de Receitas');
 legend('corretas', 'incorretas');
-title('Médias de Receitas Para Valores de Pfp (p. falsos positivos)');
+title('Médias de Receitas Para Valores de Pfp (p. falsos positivos) (BF-V3-M1)');
 grid on;
 
 sum_colisoes = zeros(num_thresholds, num_Pfp_s);

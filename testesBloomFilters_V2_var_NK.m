@@ -119,14 +119,14 @@ bar(a_values, [media_rc_a, media_ri_a], 'grouped');
 xlabel('a');
 ylabel('média de Receitas');
 legend('corretas', 'incorretas');
-title('Médias de Receitas para Valores de a (n = a * m)');
+title('Médias de Receitas para Valores de a (n = a * m) (BF-V2)');
 grid on;
 figure;
 bar(k_values, [media_rc_k', media_ri_k'], 'grouped');
 xlabel('k');
 ylabel('média de Receitas');
 legend('corretas', 'incorretas');
-title('Médias de Receitas Para Valores de k (nº hashfunctions)');
+title('Médias de Receitas Para Valores de k (nº hashfunctions) (BF-V2)');
 grid on;
 
 sum_colisoes = zeros(length(a_values), length(k_values));
@@ -155,7 +155,7 @@ for i = 1:length(a_values)
 end
 xlabel('k');
 ylabel('falsos positivos');
-title('Número Falsos Positivos (BF-v2)');
+title('Número Falsos Positivos (BF-V2)');
 legend('show');
 hold off;
 grid on;
@@ -169,7 +169,7 @@ for i = 1:length(a_values)
 end
 xlabel('k');
 ylabel('colisões');
-title('Número Colisões Totais (BF-v2)');
+title('Número Colisões Totais (BF-V2)');
 legend('show');
 hold off;
 grid on;
@@ -188,7 +188,7 @@ hold off;
 xlabel('k');
 ylabel('a (n = a * m)');
 zlabel('Falsos Positivos');
-title('Variação dos Falsos Positivos e Nº Colisões (BF-v2)', 'FontSize', 12, 'FontWeight', 'bold');
+title('Variação dos Falsos Positivos e Nº Colisões (BF-V2)', 'FontSize', 12, 'FontWeight', 'bold');
 colorbar;
 clim([min(sum_colisoes(:)), max(sum_colisoes(:))]);
 ylabel(colorbar, 'Número de Colisões Total');
@@ -201,7 +201,7 @@ for i = 1:length(a_values)
 end
 xlabel('k');
 ylabel('Receitas Corretas');
-title('Número Receitas Corretas (BF-v2)');
+title('Número Receitas Corretas (BF-V2)');
 legend('show');
 hold off;
 grid on;
@@ -215,7 +215,7 @@ for i = 1:length(a_values)
 end
 xlabel('k');
 ylabel('Receitas Incorretas');
-title('Número Receitas Incorretas (BF-v2)');
+title('Número Receitas Incorretas (BF-V2)');
 legend('show');
 hold off;
 grid on;
@@ -229,7 +229,7 @@ for i = 1:length(a_values)
 end
 xlabel('k');
 ylabel('tempo (s)');
-title('Tempo de Verificação das Receitas de Teste (BF-v2)');
+title('Tempo de Verificação das Receitas de Teste (BF-V2)');
 legend('show');
 hold off;
 grid on;
