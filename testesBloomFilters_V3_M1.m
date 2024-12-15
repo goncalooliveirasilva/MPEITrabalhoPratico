@@ -167,8 +167,6 @@ fprintf('> Média colisões: %f\n', mean(sum_colisoes(:)));
 fprintf('> Média receitas corretas: %f\n', m_receitas_corretas);
 fprintf('> Média receitas incorretas: %f\n', m_receitas_incorretas);
 fprintf('> Média tempo verificação receitas: %f\n', mean(tempos_verificacao(:)));
-fprintf('> RECEITAS CORRETAS: %f %%\n', m_receitas_corretas/m_falsos_positivos*100);
-fprintf('> RECEITAS INCORRETAS: %f %%\n', m_receitas_incorretas/m_falsos_positivos*100);
 fprintf('> RELAÇÃO ENTRE RECEITAS CORRETAS E INCORRETAS: %.3f\n', m_receitas_corretas/m_receitas_incorretas);
 
 
