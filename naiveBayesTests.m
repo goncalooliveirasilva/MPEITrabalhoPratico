@@ -110,5 +110,7 @@ for i = 1:num_categories_unique
     xlabel("Percentagem de dados de treino")
     ylabel("Precisão / Recall / F1")
     legend("Precisão", "Recall", "F1")
+    xlim([0.2 0.8])
+    ylim([0 1])
     hold off
 end
