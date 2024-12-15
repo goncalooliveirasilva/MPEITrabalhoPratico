@@ -62,7 +62,7 @@ num_recipes_for_category = numRecipesForCategory(train_categories);
 
 % dados treino
 % 7 bloom filters
-% 6 com as cateogiras habituais e 1 com ingredientes genéricos, 
+% 6 com as categorias habituais e 1 com ingredientes genéricos, 
 % que aparecem em todas os várias categorias
 
 % são considerados ingredientes genéricos ingredientes que aparecem
@@ -71,7 +71,7 @@ generic_threshold = 3;
 [specificIng, genericIng, ingOccurrences] = prepareDataForBFs_v3(train_data, train_categories, generic_threshold);
 
 num_categories_unique = length(categories_unique);
-m_BFs = getNumElementsForBFsv3(specificIng, genericIng, ingOccurrences, num_categories_unique);
+m_BFs = getNumElementsForBFsv3(specificIng, ingOccurrences, num_categories_unique);
 
 % Criar os bloom filters
 [BFs, ks, n] = createAllBloomFilters_v3(m_BFs, 0.001);
@@ -141,7 +141,7 @@ fprintf('Nº receitas classificadas incorretamente (BF v3-m1): %d\n', receitas_c
 % fprintf('categoria provável: %s\n', categories_unique(result));
 
 % teste com receitas de teste
-threshold = 0.6;
+threshold = 0.4;
 num_test_recipes = length(test_categories);
 receitas_acertadas = 0;
 receitas_inconclusivas = 0;

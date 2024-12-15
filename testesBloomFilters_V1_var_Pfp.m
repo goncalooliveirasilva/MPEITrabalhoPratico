@@ -11,6 +11,8 @@ clear; clc;
 % comportamento dos parâmetros avaliados.
 
 % Parâmetros a variar:
+% Pfp_s: probabilidade de falsos positivos
+
 Pfp_s = [0.15 0.14 0.11 0.1 0.05 0.01 0.005 0.001 0.0001];
 
 % load: data, categories, uniqueIngerdients
@@ -67,7 +69,9 @@ for i = 1:num_Pfp_s
     end
     temp = toc;
     tempos_verificacao(i) = temp;
-    falsos_positivos(i) = (len_tc - numRecipes);
+    % verificação de falsos positivos
+    fp = receitas_classificadas_incorretas;
+    falsos_positivos(i) = fp;
     receitas_corretas(i) = receitas_acertadas;
     receitas_incorretas(i) = receitas_classificadas_incorretas;
     % verificação de falsos negativos
@@ -78,8 +82,6 @@ for i = 1:num_Pfp_s
     dims.Properties.VariableNames = ["brazillian" "chinese" "french" "indian" "italian" "mexican"];
     hf = array2table(ks);
     hf.Properties.VariableNames = ["brazillian" "chinese" "french" "indian" "italian" "mexican"];
-    % verificação de falsos positivos
-    fp = receitas_classificadas_incorretas;
     fprintf('\n');
     fprintf('Pfp = %d\n', Pfp);
     fprintf('Nº RECEITAS DE TESTE: %d\n', num_test_recipes);
@@ -88,6 +90,7 @@ for i = 1:num_Pfp_s
     fprintf('RECEITAS IDENTIFICADAS CORRETAMENTE: %d\n', receitas_acertadas);
     fprintf('RECEITAS IDENTIFICADAS INCORRETAMENTE: %d\n', receitas_classificadas_incorretas);
     fprintf('FALSOS POSITIVOS: %d\n', fp);
+    fprintf('VERDADEIROS NEGATIVOS: %d\n', numRecipes);
     fprintf('FALSOS NEGATIVOS:\n');
     disp(fn);
     fprintf('COLISÕES POR FILTRO:\n');
@@ -119,7 +122,7 @@ hold on;
 plot(Pfp_s, falsos_positivos, '-o', 'LineWidth', 1);
 xlabel('Probabilidade falsos positivos');
 ylabel('falsos positivos');
-title('Número Falsos Positivos (BF-v1)');
+title('Número Falsos Positivos (BF-V1)');
 hold off;
 grid on;
 grid minor;
@@ -130,7 +133,7 @@ hold on;
 plot(Pfp_s, sum_colisoes, '-o', 'LineWidth', 1);
 xlabel('Probabilidade falsos positivos');
 ylabel('colisões');
-title('Número Colisões Totais (BF-v1)');
+title('Número Colisões Totais (BF-V1)');
 hold off;
 grid on;
 grid minor;
@@ -141,7 +144,7 @@ hold on;
 plot(Pfp_s, receitas_corretas, '-o', 'LineWidth', 1);
 xlabel('Probabilidade falsos positivos');
 ylabel('Receitas Corretas');
-title('Número Receitas Corretas (BF-v1)');
+title('Número Receitas Corretas (BF-V1)');
 hold off;
 grid on;
 grid minor;
@@ -152,7 +155,7 @@ hold on;
 plot(Pfp_s, receitas_incorretas, '-o', 'LineWidth', 1);
 xlabel('Probabilidade falsos positivos');
 ylabel('Receitas Incorretas');
-title('Número Receitas Incorretas (BF-v1)');
+title('Número Receitas Incorretas (BF-V1)');
 hold off;
 grid on;
 grid minor;
@@ -163,7 +166,7 @@ hold on;
 plot(Pfp_s, tempos_verificacao, '-o', 'LineWidth', 1);
 xlabel('Probabilidade falsos positivos');
 ylabel('tempo (s)');
-title('Tempo de Verificação das Receitas de Teste (BF-v1)');
+title('Tempo de Verificação das Receitas de Teste (BF-V1)');
 hold off;
 grid on;
 grid minor;

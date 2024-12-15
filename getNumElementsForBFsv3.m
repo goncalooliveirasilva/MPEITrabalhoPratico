@@ -1,4 +1,4 @@
-function m_BFs = getNumElementsForBFsv3(specificIng, genericIng, ingOcurrences, num_categories_unique)
+function m_BFs = getNumElementsForBFsv3(specificIng, ingOcurrences, num_categories_unique)
     % Esta função determina quantos elementos farão parte de cada bloom
     % filter (m)
     % Argumentos:
@@ -11,11 +11,10 @@ function m_BFs = getNumElementsForBFsv3(specificIng, genericIng, ingOcurrences, 
     %   receitas da categoria
     %   - num_categories_unique: número de categorias
     % Devolve:
-    %   - m_BFs: array com o número de elementos de cada BF + BF de
-    %   ingredientes genéricos
+    %   - m_BFs: array com o número de elementos de cada BF
     num_specific_ingredients = length(specificIng); 
     % nº de elementos de cada bloom filter
-    m_BFs = zeros(1, num_categories_unique + 1);
+    m_BFs = zeros(1, num_categories_unique);
     for i = 1:num_specific_ingredients
         ind = specificIng(i);
         % categorias em que está presente
@@ -24,5 +23,4 @@ function m_BFs = getNumElementsForBFsv3(specificIng, genericIng, ingOcurrences, 
             m_BFs(j) = m_BFs(j) + 1; 
         end
     end
-    m_BFs(end) = length(genericIng);
 end

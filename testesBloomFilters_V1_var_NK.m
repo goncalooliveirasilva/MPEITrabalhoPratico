@@ -3,9 +3,7 @@ clear; clc;
 
 % Nesta análise variamos a dimensão ds filtros (n) e o número de
 % hashfunctions (k). 
-% Em cada iteração, os 6 filtros têm o mesmo valor de n e o mesmo valor de
-% k, ou seja, têm o mesmo tamanho, mesmo que sejam inseridas mais receitas
-% nuns do que noutros.
+% Em cada iteração, os 6 filtros têm o mesmo valor de k.
 % Vão sendo impressos na consola os parâmetros de cada iteração mais detalhadamente. 
 % No final são criados alguns gráficos para se perceber mais fácilmente o
 % comportamento dos parâmetros avaliados.
@@ -34,14 +32,16 @@ end
 fprintf('===== TESTES BLOOM FILTER VERSÃO 1 =====\n');
 fprintf('OS FILTROS TÊM TODOS OS MESMOS VALORES DE K E N\n')
 
-falsos_positivos = zeros(length(a_values), length(k_values));
-colisoes = cell(length(a_values), length(k_values));
-receitas_corretas = zeros(length(a_values), length(k_values));
-receitas_incorretas = zeros(length(a_values), length(k_values));
-tempos_verificacao = zeros(length(a_values), length(k_values));
+num_a_values = length(a_values);
+num_k_values = length(k_values);
+falsos_positivos = zeros(num_a_values, num_k_values);
+colisoes = cell(num_a_values, num_k_values);
+receitas_corretas = zeros(num_a_values, num_k_values);
+receitas_incorretas = zeros(num_a_values, num_k_values);
+tempos_verificacao = zeros(num_a_values, num_k_values);
 len_tc = length(test_categories);
-for a_ind = 1:length(a_values)
-    for k_ind = 1:length(k_values)
+for a_ind = 1:num_a_values
+    for k_ind = 1:num_k_values
 
         a = a_values(a_ind);
         k_value = k_values(k_ind);
@@ -78,6 +78,8 @@ for a_ind = 1:length(a_values)
         end
         temp = toc;
         tempos_verificacao(a_ind, k_ind) = temp;
+        % verificação de falsos positivos
+        fp = receitas_classificadas_incorretas;
         falsos_positivos(a_ind, k_ind) = fp;
         receitas_corretas(a_ind, k_ind) = receitas_acertadas;
         receitas_incorretas(a_ind, k_ind) = receitas_classificadas_incorretas;
@@ -85,9 +87,6 @@ for a_ind = 1:length(a_values)
         fn = getFalseNegatives(BFs, test_data, test_categories, uniqueIngredients, ks);
         fn = array2table(fn);
         fn.Properties.VariableNames = ["brazillian" "chinese" "french" "indian" "italian" "mexican"];
-
-        % verificação de falsos positivos
-        fp = receitas_classificadas_incorretas;
         fprintf('\n');
         fprintf('n = %d*m; k = %d\n', a, k_value);
         fprintf('Nº RECEITAS DE TESTE: %d\n', num_test_recipes);
@@ -96,6 +95,7 @@ for a_ind = 1:length(a_values)
         fprintf('RECEITAS IDENTIFICADAS CORRETAMENTE: %d\n', receitas_acertadas);
         fprintf('RECEITAS IDENTIFICADAS INCORRETAMENTE: %d\n', receitas_classificadas_incorretas);
         fprintf('FALSOS POSITIVOS: %d\n', fp);
+        fprintf('VERDADEIROS NEGATIVOS: %d\n', numRecipes);
         fprintf('FALSOS NEGATIVOS:\n');
         disp(fn);
         fprintf('COLISÕES POR FILTRO:\n');

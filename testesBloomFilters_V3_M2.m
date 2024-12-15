@@ -1,17 +1,18 @@
-%% TESTES BLOOM FILTER VERSÃO 3 MÉTODO 1
+%% TESTES BLOOM FILTER VERSÃO 3
 clear; clc;
 
 % Nesta análise variamos a probabilidade de falsos positivos e o threshold,
 % que corresponde à percentagem de ingredientes da receita que devem ser
 % reconhecidos. 
-% No método 1 vemos a receita toda em cada filtro e
-% determinamos qual deles identifica mais ingredientes. Ingredientes que
-% apareçam em 3 ou mais receitas são considerados ingedientes genéricos e
-% são excluídos (não são inseridos nos filtros). Se o filtro que identifica
-% mais ingredientes identificar em número igual ou superior ao produto do
+% No método 2 analisamos ingrediente a ingrediente qual filtro o reconhece
+% e depois vemos qual a categoria mais presente entre os ingredientes.
+% Ingredientes que apareçam em 3 ou mais receitas são considerados ingedientes genéricos e
+% são excluídos (não são inseridos nos filtros). 
+% Se a categoria maias presente entre os ingredientes for em número igual ou superior ao produto do
 % número de ingredientes da receita pelo threshold, então a categoria da
-% receita será a categoria desse filtro. Caso haja empate entre filtros ou
-% a condição anterior não seja verificada, a categoria não é determinada.
+% receita será a categoria mais presente. 
+% A categoria do ingrediente corresponde à categoria do primeiro filtro que
+% o identificou.
 % Os dados para teste são selecionados aleatóriamente, pelo que em
 % diferentes execuções deste script ocorrem ligeiras variações, mas que não
 % produzem grande impacto na avaliação deste método.
@@ -21,14 +22,14 @@ clear; clc;
 % médios com o objetivo de se perceber de um modo geral a resposta da
 % abordagem à variação dos parâmetros.
 
+
+
 % Parâmetros a variar:
 % Pfp_s: probabilidade de falsos positivos
 % thesholds
 
 Pfp_s = [0.15 0.1 0.05 0.01 0.001];
 thresholds = [0.7 0.6 0.5 0.55 0.45 0.4 0.3];
-
-
 
 % load: data, categories, uniqueIngerdients
 load("dataToNaiveBayes.mat");
@@ -38,7 +39,7 @@ num_recipes_for_category = numRecipesForCategory(train_categories);
 categories_unique = unique(categories);
 num_categories_unique = length(categories_unique);
 
-fprintf('===== TESTES BLOOM FILTER VERSÃO 3 M1 =====\n');
+fprintf('===== TESTES BLOOM FILTER VERSÃO 3 M2 =====\n');
 fprintf('N E K SÃO CALCULADOS PELAS EXPRESSÕES TEÓRICAS\n');
 num_Pfp_s = length(Pfp_s);
 num_thresholds = length(thresholds);
@@ -49,6 +50,7 @@ num_hashfunctions = cell(num_thresholds, num_Pfp_s);
 receitas_corretas = zeros(num_thresholds, num_Pfp_s);
 receitas_incorretas = zeros(num_thresholds, num_Pfp_s);
 tempos_verificacao = zeros(num_thresholds, num_Pfp_s);
+len_tc = length(test_categories);
 
 % são considerados ingredientes genéricos ingredientes que aparecem
 % em generic_threshold ou mais categorias
@@ -76,9 +78,10 @@ for i = 1:num_Pfp_s
         receitas_classificadas_incorretas = 0;
         tic;
         for j = 1:num_test_recipes
-            recognizedIngredients = checkTheWholeRecipe(BFs, uniqueIngredients(test_data(j, :) == 1), ks);
-            numIngredients = length(uniqueIngredients(test_data(j, :) == 1));
-            result = decideRecipeBF_v3_m1(recognizedIngredients, numIngredients, threshold);
+            ingredients = uniqueIngredients(test_data(j, :) == 1);
+            ingredientsProbableCategory = checkIngedientByIngredient(BFs, ingredients, ks);
+            numIngredients = length(ingredients);
+            result = decideRecipeBF_v3_m2(ingredientsProbableCategory, numIngredients, threshold);
             if result ~= 0
                 if test_categories(j) == categories_unique(result)
                     receitas_acertadas = receitas_acertadas + 1;
@@ -180,7 +183,7 @@ for i = 1:num_thresholds
 end
 xlabel('probabilidade falsos positivos');
 ylabel('falsos positivos');
-title('Número Falsos Positivos (BF-V3-M1)');
+title('Número Falsos Positivos (BF-V3-M2)');
 legend('show');
 hold off;
 grid on;
@@ -194,7 +197,7 @@ for i = 1:num_thresholds
 end
 xlabel('probabilidade falsos positivos');
 ylabel('colisões');
-title('Número Colisões Totais (BF-V3-M1)');
+title('Número Colisões Totais (BF-V3-M2)');
 legend('show');
 hold off;
 grid on;
@@ -209,7 +212,7 @@ for i = 1:num_thresholds
 end
 xlabel('probabilidade falsos positivos');
 ylabel('Receitas Corretas');
-title('Número Receitas Corretas (BF-V3-M1)');
+title('Número Receitas Corretas (BF-V3-M2)');
 legend('show');
 hold off;
 grid on;
@@ -223,7 +226,7 @@ for i = 1:num_thresholds
 end
 xlabel('probabilidade falsos positivos');
 ylabel('Receitas Incorretas');
-title('Número Receitas Incorretas (BF-V3-M1)');
+title('Número Receitas Incorretas (BF-V3-M2)');
 legend('show');
 hold off;
 grid on;
@@ -237,9 +240,8 @@ for i = 1:num_thresholds
 end
 xlabel('probabilidade falsos positivos');
 ylabel('tempo (s)');
-title('Tempo de Verificação das Receitas de Teste (BF-V3-M1)');
+title('Tempo de Verificação das Receitas de Teste (BF-V3-M2)');
 legend('show');
 hold off;
 grid on;
 grid minor;
-
