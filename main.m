@@ -39,8 +39,38 @@ num_recipes_for_category = numRecipesForCategory(train_categories);
 
 % Inserção das receitas no respetivo bloom filter 
 
-% ALTERAR PARA A OUTRA FUNÇÃO
 [BFs, ~, ~] = addRecipesToBloomFilters_v1(BFs, n, ks, train_data, train_categories, uniqueIngredients);
+
+% Teste receitas (dados teste) inconclusivas (estão em mais que um bloom filter)
+numRecipes = getInconclusiveRecipes(BFs, test_categories, test_data, ks, categories_unique, uniqueIngredients, 1);
+fprintf('RECEITAS INCONCLUSIVAS V2: %d\n', numRecipes);
+fprintf('RECEITAS IDENTIFICADAS NOS BLOOM FILTERS V2: %d\n', (length(test_categories) - numRecipes));
+
+% Teste falsos negativos
+fn = getFalseNegatives(BFs, test_data, test_categories, uniqueIngredients, ks);
+fprintf('FALSOS NEGATIVOS V2\n');
+disp(fn); % tudo 0's como é suposto
+
+% teste com receitas de teste
+num_test_recipes = length(test_categories);
+receitas_acertadas = 0;
+receitas_classificadas_incorretas = 0;
+for i = 1:num_test_recipes
+    ingredients = uniqueIngredients(test_data(i, :) == 1);
+    [isMember, category] = checkIfRecipeIsKnown(BFs, ingredients, ks, categories_unique, 1);
+    if isMember
+        if category == test_categories(i)
+            receitas_acertadas = receitas_acertadas + 1;
+        else
+            receitas_classificadas_incorretas = receitas_classificadas_incorretas + 1;
+        end
+    end
+end
+
+fprintf('\n');
+fprintf('Nº receitas de teste: %d\n', num_test_recipes);
+fprintf('Nº receitas classificadas corretamente (BF v2): %d\n', receitas_acertadas);
+fprintf('Nº receitas classificadas incorretamente (BF v2): %d\n', receitas_classificadas_incorretas);
 
 
 
@@ -55,6 +85,36 @@ num_recipes_for_category = numRecipesForCategory(train_categories);
 % adicionar receitas aos filtros não correspondentes
 [BFs, ~, ~] = addRecipesToBloomFilters_v2(BFs, n, ks, train_data, train_categories, uniqueIngredients);
 
+% Teste receitas (dados teste) inconclusivas (estão em mais que um bloom filter)
+numRecipes = getInconclusiveRecipes(BFs, test_categories, test_data, ks, categories_unique, uniqueIngredients, 2);
+fprintf('RECEITAS INCONCLUSIVAS V2: %d\n', numRecipes);
+fprintf('RECEITAS IDENTIFICADAS NOS BLOOM FILTERS V2: %d\n', (length(test_categories) - numRecipes));
+
+% Teste falsos negativos
+fn = getFalseNegatives(BFs, test_data, test_categories, uniqueIngredients, ks);
+fprintf('FALSOS NEGATIVOS V2\n');
+disp(fn); % tudo 0's como é suposto
+
+% teste com receitas de teste
+num_test_recipes = length(test_categories);
+receitas_acertadas = 0;
+receitas_classificadas_incorretas = 0;
+for i = 1:num_test_recipes
+    ingredients = uniqueIngredients(test_data(i, :) == 1);
+    [isMember, category] = checkIfRecipeIsKnown(BFs, ingredients, ks, categories_unique, 2);
+    if isMember
+        if category == test_categories(i)
+            receitas_acertadas = receitas_acertadas + 1;
+        else
+            receitas_classificadas_incorretas = receitas_classificadas_incorretas + 1;
+        end
+    end
+end
+
+fprintf('\n');
+fprintf('Nº receitas de teste: %d\n', num_test_recipes);
+fprintf('Nº receitas classificadas corretamente (BF v2): %d\n', receitas_acertadas);
+fprintf('Nº receitas classificadas incorretamente (BF v2): %d\n', receitas_classificadas_incorretas);
 
 
 %% BLOOM FILTER VERSÃO 3
@@ -68,7 +128,7 @@ num_recipes_for_category = numRecipesForCategory(train_categories);
 % são considerados ingredientes genéricos ingredientes que aparecem
 % em generic_threshold ou mais categorias
 generic_threshold = 3;
-[specificIng, genericIng, ingOccurrences] = prepareDataForBFs_v3(train_data, train_categories, generic_threshold);
+[specificIng, ~, ingOccurrences] = prepareDataForBFs_v3(train_data, train_categories, generic_threshold);
 
 num_categories_unique = length(categories_unique);
 m_BFs = getNumElementsForBFsv3(specificIng, ingOccurrences, num_categories_unique);
@@ -225,6 +285,11 @@ for pairIdx=1:size(pairs, 1)
 end
 
 
+
+
+
+
+
 %% DEMONSTRAÇÃO CONJUNTA
 clear
 clc
@@ -251,6 +316,23 @@ test_categories = categories(perm((end-n_test_elements + 1): end));
 %%%%%%%---------------------------------------------------------
 %%%%%%% Código para criar os filtros meter os dados de treino lá
 
+% ingredientes que aparecem em 3 ou mais categorias são excluídos
+generic_threshold = 3;
+threshold = 0.3;
+prob_falsos_positivos = 0.001;
+acertos_bloom_filter = 0;
+
+% divisão dos ingredientes
+[specificIng, genericIng, ingOccurrences] = prepareDataForBFs_v3(train_data, train_categories, generic_threshold);
+num_categories_unique = length(categories_unique);
+m_BFs = getNumElementsForBFsv3(specificIng, ingOccurrences, num_categories_unique);
+
+% Criação dos bloom filters
+[BFs, ks, n] = createAllBloomFilters_v3(m_BFs, prob_falsos_positivos);
+
+% Inserção dos ingredientes
+[BFs, ~, ~] = addIngredientsToBloomFilters_v3(BFs, n, ks, specificIng, ingOccurrences, uniqueIngredients);
+
 
 %%%%%%%---------------------------------------------------------
 
@@ -266,7 +348,7 @@ limiar_resultado = 0.5;
 printElement = @(el) fprintf('%s: {%s}\n', el{2}, join(string(el{1}), ', '));
 
 % Número de receitas acertadas corretamente
-n_certos = 0;
+n_acertos = 0;
 
 % Dados de treino
 train_data_minhash = full_data(perm(1:(end-n_test_elements)), :);
@@ -288,6 +370,35 @@ for test_data_idx = 1:size(test_data, 1)
 
     %%%%%%%-----------------------------------------------------
     %%%%%%% Código para testar o elemento com o bloom filter
+    
+    % ingredientes presentes na receita
+    ingredients = uniqueIngredients(recipe_data == 1);
+
+    % número de ingredientes da receita
+    numIngredients = length(ingredients);
+
+    % quantos ingredientes são reconhecidos em cada bloom filter
+    recognizedIngredients = checkTheWholeRecipe(BFs, ingredients, ks);
+
+    % resultado da etapa
+    result = decideRecipeBF_v3_m1(recognizedIngredients, numIngredients, threshold);
+    if result ~= 0
+        % suposta categoria da receita
+        category = categories_unique(result);
+        fprintf("Bloom Filter: origem: %s\n", category);
+        fprintf("\nRESULTADO:\n");
+        if strcmp(string(category), recipe_data_minhash{1, 2})
+            n_acertos = n_acertos + 1;
+            acertos_bloom_filter = acertos_bloom_filter + 1;
+            fprintf("Acertou!\n\n")
+        else
+            fprintf("Falhou...\n\n");
+        end
+        continue;
+    end
+
+    fprintf("Bloom Filter: origem: inconclusivo\n");
+
 
     %%% Se não houver problemas, dar a resposta.
     %%% Se houver, continuar.
@@ -323,11 +434,12 @@ for test_data_idx = 1:size(test_data, 1)
     fprintf("A receita classifica-se como %s\n", cat_resultado)
 
     if strcmp(string(cat_resultado), recipe_data_minhash{1, 2})
-        n_certos = n_certos + 1;
+        n_acertos = n_acertos + 1;
         fprintf("Acertou!\n\n")
     else
         fprintf("Falhou...\n\n")
     end
 end
 
-fprintf("%d das %d receitas foram classificadas corretamente.", n_certos, n_test_elements)
+fprintf("%d das %d receitas foram classificadas corretamente.\n", n_acertos, n_test_elements)
+fprintf("Bloom Filter acertou %d receitas\n", acertos_bloom_filter)

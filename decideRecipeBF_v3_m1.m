@@ -1,5 +1,5 @@
 function result = decideRecipeBF_v3_m1(recognizedIngredients, numIngredients, threshold)
-    % Esta função determina o índice da categoria da receita, o indice do
+    % Esta função determina o índice da categoria da receita, ou seja, o indice do
     % bloom filter em que foram reconhecidos mais ingredientes.
     % Argumentos:
     %   - recognizedIngredients: array com o número de ingredientes
