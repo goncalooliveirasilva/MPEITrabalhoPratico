@@ -1,20 +1,18 @@
+% Determina os dados necessários para a implementação da versão 3 dos Bloom filters
+% Argumentos:
+%   - train_data: cell array com as receitas de treino
+%   - train_categories: cell array com as categorias das receitas de treino
+%   - generic_threshold: número de vezes que os ingredientes aparecem nas categorias
+%                        para os considerar genéricos
+% Retorna:
+%   - specificIng: indices dos ingredientes que aparecem num número igual ou
+%                  inferior a generic_threshold categorias
+%   - genericIng: indices dos ingredientes que aparecem num número superior a
+%                 generic_threshold categorias
+%   - ingOccurrences: matriz uniqueIngridients x categorias onde em cada célula está
+%                     o número total de vezes que o ingrediente aparece nas receitas
+%                     da categoria
 function [specificIng, genericIng, ingOccurrences] = prepareDataForBFs_v3(train_data, train_categories, generic_threshold)
-    % Esta função determina dados necessários para a implementação da
-    % versão 3 dos bloom filters
-    % Argumentos:
-    %   - train_data: cell array com as receitas de treino
-    %   - train_categories: cell array com as categorias das receitas de
-    %   treino
-    %   - generic_threshold: número de vezes que os ingredientes aparecem
-    %   nas categorias para os considerar genéricos
-    % Devolve:
-    %   - specificIng: indices dos ingredientes que aparecem num número
-    %   igual ou inferior a generic_threshold categorias
-    %   - genericIng: indices dos ingredientes que aparecem num número
-    %   superior a generic_threshold categorias
-    %   - ingOccurrences: matriz uniqueIngridients x categorias onde em cada
-    %   célula está o número total de vezes que o ingrediente aparece nas
-    %   receitas da categoria
     num_ingredients = size(train_data, 2);
     cat_unique = unique(train_categories);
     num_categories = length(cat_unique);

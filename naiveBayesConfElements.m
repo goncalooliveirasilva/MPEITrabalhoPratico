@@ -8,7 +8,7 @@
 % Retorna:
 %   - confElements: cell array com uma matriz para cada categoria da forma:
 %       [TP TN FP FN]
-function confElements = NaiveBayesConfElements(data, categories, categories_unique, base_probs, probs)
+function confElements = naiveBayesConfElements(data, categories, categories_unique, base_probs, probs)
     % Inicializar
     confElements = cell(1, length(categories_unique));
     conf_matrix = zeros(length(categories_unique));

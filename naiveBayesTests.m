@@ -1,3 +1,5 @@
+% Testes para o Naïve Bayes
+
 clear
 clc
 rng("shuffle")
@@ -26,10 +28,10 @@ for i = 1:num_iter
     num_categories_unique = length(categories_unique);
 
     % Obter TP, TN, FP e FN
-    confElements = NaiveBayesConfElements(test_data, test_categories, categories_unique, base_probs, probs);
+    confElements = naiveBayesConfElements(test_data, test_categories, categories_unique, base_probs, probs);
     
     % Obter Precision, Recall, F1
-    prf{i} = NaiveBayesErrorData(confElements);
+    prf{i} = naiveBayesErrorData(confElements);
 end
 
 % Calcular média
@@ -79,10 +81,10 @@ for i = 1:length(splits)
     num_categories_unique = length(categories_unique);
 
     % Obter TP, TN, FP e FN
-    confElements = NaiveBayesConfElements(test_data, test_categories, categories_unique, base_probs, probs);
+    confElements = naiveBayesConfElements(test_data, test_categories, categories_unique, base_probs, probs);
     
     % Obter Precision, Recall, F1
-    prf2{i} = NaiveBayesErrorData(confElements);
+    prf2{i} = naiveBayesErrorData(confElements);
 end
 
 precisions = cellfun(@(x) cellfun(@(y) y(1), x), prf2, "UniformOutput", false);

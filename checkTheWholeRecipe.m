@@ -1,13 +1,12 @@
+% Verifica quantos ingredientes são reconhecidos em cada Bloom filter.
+% Argumentos:
+%   - BFs: cell array com os filtros de Bloom
+%   - ingredients: cell array com os ingredientes da receita
+%   - ks: array com o s valores otimos de k de cada Bloom filter
+% Devolve:
+%   - recognizedIngredients: array com o número de ingredientes
+%                            reconhecidos em cada Bloom filter
 function [recognizedIngredients] = checkTheWholeRecipe(BFs, ingredients, ks)
-    % Esta função verifica quantos ingredientes são reconhecidos em cada
-    % bloom filter
-    % Argumentos:
-    %   - BFs: cell array com os filtros de bloom
-    %   - ingredients: cell array com os ingredientes da receita
-    %   - ks: array com o s valores otimos de k de cada bloom filter
-    % Devolve:
-    %   - recognizedIngredients: array com o número de ingredientes
-    %   reconhecidos em cada bloom filter
     B = length(BFs);
     N = length(ingredients);
     recognizedIngredients = zeros(1, B);

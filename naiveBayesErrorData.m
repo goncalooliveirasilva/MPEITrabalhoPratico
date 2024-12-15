@@ -1,5 +1,10 @@
-% Retorna uma cell array com os dados da precisão, recall e f1 para cada categoria.
-function prf = NaiveBayesErrorData(confElements)
+% Calcula os dados da precisão, recall e f1 para cada categoria.
+% Argumentos:
+%   - confElements: cell array com uma matriz para cada categoria da forma:
+%           [TP TN FP FN]
+% Retorna:
+%   - prf: cell array com a precisão, recall e f1 para cada categoria
+function prf = naiveBayesErrorData(confElements)
     n_cats = length(confElements);
     prf = cell(1, n_cats); % Precision, Recall e F1
     for i = 1:n_cats

@@ -1,14 +1,12 @@
+% Esta função calcula o número de falsos negativos de cada Bloom filter (deverá ser 0)
+% Argumentos:
+%   - Bfs: cell array com os Bloom filters
+%   - data: matriz logica
+%   - categories: cell array com as categorias de cada receita
+%   - uniqueIngredients: cell array com os ingredientes das receitas sem duplicados
+% Retorna:
+%   - fn: cell array 1xlength(BFs) com o número de falsos negativos para cada filtro
 function fn = getFalseNegatives(BFs, data, categories, uniqueIngredients, ks)
-    % Esta função calcula o número de falsos negativos de cada bloom filter
-    % Argumentos:
-    %   - Bfs: cell array com os bloom filters
-    %   - data: matriz logica
-    %   - categories: cell array com as categorias de cada receita
-    %   - uniqueIngredients: cell array com os ingredientes das receitas
-    %   sem duplicados
-    % Devolve:
-    %   - fn: cell array 1xlength(BFs) com o número de falsos negativos
-    %   para cada bloom filter
     R = length(categories);
     N = length(BFs);
     fn = zeros(1, N);

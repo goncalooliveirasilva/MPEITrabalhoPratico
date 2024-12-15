@@ -1,15 +1,14 @@
+% Cria um cell array que contém um bloom filter para cada categoria.
+% Assume que é adotado o k ótimo na inserção dos elementos.
+% Argumentos:
+%   - m_BFs: numero de ingredientes em cada categoria
+%   - Pfp: objetivo de percentagem de falsos positivos
+%   - n_value(opcional): criar bloom filters com um tamanho especifico
+% Retorna:
+%   BFs: cell array com um bloom filter em cada coluna
+%   ks: array com os valores ótimos de k para cada bloom filter
+%   n: tamanho de cada bloom filter
 function [BFs, ks, n] = createAllBloomFilters_v3(m_BFs, Pfp, n_value)
-    % Esta função cria um cell array que contém um bloom filter para
-    % cada categoria. Assume que é adotado o k ótimo na inserção dos
-    % elementos.
-    % Argumentos:
-    %   - m_BFs: numero de ingredientes em cada categoria
-    %   - Pfp: objetivo de percentagem de falsos positivos
-    %   - n_value(opcional): criar bloom filters com um tamanho especifico
-    % Devolve:
-    %   BFs: cell array com um bloom filter em cada coluna
-    %   ks: array com os valores ótimos de k para cada bloom filter
-    %   n: tamanho de cada bloom filter
     cat_unique = length(m_BFs);
     BFs = cell(1, cat_unique);
     % determinar os valores de n para cada filtro
