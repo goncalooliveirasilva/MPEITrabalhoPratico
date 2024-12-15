@@ -1,6 +1,6 @@
 function result = decideRecipeBF_v3_m2(ingredientsProbableCategory, numIngredients, threshold)
     % Argumentos:
-    %   - ingredientsProbableCategory: rray com os indices das categorias dos ingredientes 
+    %   - ingredientsProbableCategory: array com os indices das categorias dos ingredientes 
     %   - numIngredients: número de ingredientes da receita
     %   - threshold (opcional): valor para decidir se a receita é identificado ou não.
     %   Deve estar entre 0 e 1. Representa quantas vezes a categoria mais fequente deve aparecer
