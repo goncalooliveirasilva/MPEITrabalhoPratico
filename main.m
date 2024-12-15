@@ -121,12 +121,10 @@ fprintf('Nº receitas classificadas incorretamente (BF v2): %d\n', receitas_clas
 % Inserir ingredientes em vez de receitas
 
 % dados treino
-% 7 bloom filters
-% 6 com as categorias habituais e 1 com ingredientes genéricos, 
-% que aparecem em todas os várias categorias
+% 6 bloom filters com as categorias habituais
 
 % são considerados ingredientes genéricos ingredientes que aparecem
-% em generic_threshold ou mais categorias
+% em generic_threshold ou mais categorias. Esses ingredientes são ignorados
 generic_threshold = 3;
 [specificIng, ~, ingOccurrences] = prepareDataForBFs_v3(train_data, train_categories, generic_threshold);
 
