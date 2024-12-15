@@ -313,9 +313,6 @@ test_categories = categories(perm((end-n_test_elements + 1): end));
 % Obter matriz de probabilidades (naïve bayes)
 [categories_unique, base_probs, probs] = getProbabilities(train_data, train_categories);
 
-%%%%%%%---------------------------------------------------------
-%%%%%%% Código para criar os filtros meter os dados de treino lá
-
 % ingredientes que aparecem em 3 ou mais categorias são excluídos
 generic_threshold = 3;
 
@@ -335,8 +332,6 @@ m_BFs = getNumElementsForBFsv3(specificIng, ingOccurrences, num_categories_uniqu
 % Inserção dos ingredientes
 [BFs, ~, ~] = addIngredientsToBloomFilters_v3(BFs, n, ks, specificIng, ingOccurrences, uniqueIngredients);
 
-
-%%%%%%%---------------------------------------------------------
 
 % MINHASH
 load("dataset.mat")
@@ -370,8 +365,7 @@ for test_data_idx = 1:size(test_data, 1)
     fprintf("Receita a testar:\n")
     printElement(recipe_data_minhash)
 
-    %%%%%%%-----------------------------------------------------
-    %%%%%%% Código para testar o elemento com o bloom filter
+    % BLOOM FILTERS
     
     % ingredientes presentes na receita
     ingredients = uniqueIngredients(recipe_data == 1);
@@ -402,11 +396,6 @@ for test_data_idx = 1:size(test_data, 1)
 
     fprintf("Bloom Filter: origem: inconclusivo\n");
 
-
-    %%% Se não houver problemas, dar a resposta.
-    %%% Se houver, continuar.
-    %%% Meter uns prints a falar do resultado (se é inconclusivo, etc)
-    %%%%%%%-----------------------------------------------------
 
     % NAÏVE BAYES
     [cat, prob] = testCategory(recipe_data, categories_unique, base_probs, probs);
