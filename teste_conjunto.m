@@ -5,7 +5,7 @@ clc
 % Análise do comportamento do programa completo.
 % Avaliamos o número de acertos totais e de acertos de cada componente.
 
-num_iter = 10;
+num_iter = 20;
 acertos_bloom_filter = zeros(1, num_iter);
 acertos_naive =  zeros(1, num_iter);
 acertos_minhash = zeros(1, num_iter);
@@ -15,7 +15,7 @@ n_acertos_totais = zeros(1, num_iter);
 n_test_elements = 5;
 
 for teste = 1:num_iter
-    fprintf('==== Iteração %d de %d ====\n\n', teste, num_iter);
+    fprintf('\n==== Iteração %d de %d ====\n\n', teste, num_iter);
     rng("shuffle")
 
     % NAÏVE BAYES E BLOOM FILTERS
@@ -133,22 +133,27 @@ for teste = 1:num_iter
         pairs = simPairs(train_data_minhash, recipe_data_minhash, J, limiar);
         fprintf("Pares similares: A receita mais similar tem distância %f:\n", pairs{1, 3})
         printElement(train_data_minhash(pairs{1, 1}, :))
-
+        
+        aux = false;
 
         % Resultado
         fprintf("\nRESULTADO:\n")
         if pairs{1, 3} <= limiar_resultado
             cat_resultado = train_data_minhash{pairs{1, 1}, 2};
-            acertos_minhash(teste) = acertos_minhash(teste) + 1;
+            aux = true;
         else
             cat_resultado = cat;
-            acertos_naive(teste) = acertos_naive(teste) + 1;
         end
         fprintf("A receita classifica-se como %s\n", cat_resultado)
 
         if strcmp(string(cat_resultado), recipe_data_minhash{1, 2})
             n_acertos_totais(teste) = n_acertos_totais(teste) + 1;
             fprintf("Acertou!\n\n")
+            if aux
+                acertos_minhash(teste) = acertos_minhash(teste) + 1;
+            else
+              acertos_naive(teste) = acertos_naive(teste) + 1;  
+            end
         else
             fprintf("Falhou...\n\n")
         end
